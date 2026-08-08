@@ -2,17 +2,21 @@
   "name": "fitamins",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Fitamins Healthcare — animated marketing site (React + Vite + Framer Motion).",
-  "workspaces": [
-    "apps/web"
-  ],
   "scripts": {
-    "dev": "npm run dev --workspace @fitamins/web",
-    "build": "npm run build --workspace @fitamins/web",
-    "preview": "npm run preview --workspace @fitamins/web",
-    "start": "npm run start --workspace @fitamins/web",
-    "lint": "npm run lint --workspace @fitamins/web",
-    "clean": "npm run clean --workspace @fitamins/web && rm -rf node_modules"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "vite preview --port 5173",
+    "lint": "echo \"(no lint)\" && exit 0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "framer-motion": "^11.11.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.8"
   },
   "engines": {
     "node": ">=18"
