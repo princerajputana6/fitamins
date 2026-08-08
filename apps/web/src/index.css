@@ -56,7 +56,9 @@ body {
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) so it does NOT create a scroll container that would
+     break `position: sticky` on the pinned Process section. */
+  overflow-x: clip;
 }
 img,
 svg {
@@ -311,42 +313,52 @@ textarea {
   gap: 24px;
 }
 .brand {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
 }
-.brand__mark {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: var(--forest);
-  display: grid;
-  place-items: center;
-  flex: none;
-  box-shadow: 0 8px 20px -8px rgba(31, 107, 82, 0.8);
+/* Logo artwork only — no text lockup. */
+.brand__logo {
+  height: 34px;
+  width: auto;
+  display: block;
+  transition: filter 0.4s var(--ease);
 }
-.brand__mark svg {
-  width: 19px;
-  height: 19px;
-}
-.brand__txt {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-.brand__name {
+/* Wordmark fallback (used only until /logo.png exists). */
+.brand__word {
   font-family: var(--display);
   font-weight: 700;
-  font-size: 19px;
+  font-size: 22px;
   letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
 }
-.brand__sub {
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: var(--ink-40);
-  text-transform: uppercase;
-  margin-top: 4px;
+.brand__word i {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--forest);
+  margin-left: 6px;
+}
+/* Invert the black logo to white over dark backgrounds. */
+.nav:not(.is-stuck) .brand__logo {
+  filter: brightness(0) invert(1);
+}
+.nav:not(.is-stuck) .brand__word {
+  color: #fff;
+}
+.nav:not(.is-stuck) .brand__word i {
+  color: var(--lime);
+}
+.foot .brand__logo {
+  filter: brightness(0) invert(1);
+}
+.brand--foot .brand__logo {
+  height: 38px;
+}
+.foot .brand__word {
+  color: #fff;
+}
+.foot .brand__word i {
+  color: var(--lime);
 }
 .nav__links {
   display: flex;
@@ -375,6 +387,26 @@ textarea {
 }
 .nav__links a:hover::after {
   width: 100%;
+}
+/* Over the dark hero the bar is transparent — light up the links so they read. */
+.nav:not(.is-stuck) .nav__links a {
+  color: rgba(255, 255, 255, 0.86);
+  text-shadow: 0 1px 12px rgba(10, 32, 25, 0.55);
+}
+.nav:not(.is-stuck) .nav__links a:hover {
+  color: #fff;
+}
+.nav:not(.is-stuck) .nav__links a::after {
+  background: var(--lime);
+}
+.nav:not(.is-stuck) .nav__toggle {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.nav:not(.is-stuck) .nav__toggle span,
+.nav:not(.is-stuck) .nav__toggle span::before,
+.nav:not(.is-stuck) .nav__toggle span::after {
+  background: #fff;
 }
 .nav__cta {
   display: flex;
@@ -681,18 +713,19 @@ textarea {
 .split__badge {
   position: absolute;
   z-index: 3;
-  bottom: 22px;
-  left: 22px;
-  right: 22px;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(14px);
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, rgba(10, 32, 25, 0.92), rgba(31, 107, 82, 0.9));
+  border: 1px solid rgba(199, 245, 91, 0.35);
+  backdrop-filter: blur(6px);
   border-radius: var(--r-lg);
   padding: 18px 20px;
   color: #fff;
   display: flex;
   align-items: center;
   gap: 16px;
+  box-shadow: 0 18px 40px -20px rgba(10, 32, 25, 0.8);
 }
 .split__badge b {
   font-family: var(--display);
@@ -700,10 +733,12 @@ textarea {
   font-size: 34px;
   letter-spacing: -0.03em;
   line-height: 1;
+  color: var(--lime);
+  flex: none;
 }
 .split__badge span {
   font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.4;
 }
 .split__big {
@@ -725,6 +760,22 @@ textarea {
 .split__body strong {
   color: var(--ink);
   font-weight: 600;
+}
+/* Merged "who we are" + consultation form: image left, copy + form right. */
+.split--form {
+  align-items: stretch;
+}
+/* Let the image fill the full height of the (taller) content column. */
+.split--form .split__media {
+  aspect-ratio: auto;
+  min-height: 520px;
+}
+.split--form .split__content {
+  display: flex;
+  flex-direction: column;
+}
+.split--form .form {
+  margin-top: clamp(28px, 3.4vw, 40px);
 }
 
 /* ============================================================ CAPABILITIES SLIDER ============================================================ */
@@ -1371,6 +1422,14 @@ textarea {
   font-style: normal;
   color: var(--lime);
 }
+/* Animated EKG / heartbeat accent (fitness motif). */
+.pulseline {
+  display: block;
+  width: min(460px, 70%);
+  height: 46px;
+  margin: clamp(30px, 4vw, 48px) auto 0;
+  opacity: 0.95;
+}
 
 /* ============================================================ CONTACT ============================================================ */
 .contact {
@@ -1584,13 +1643,16 @@ textarea {
 /* ============================================================ RESPONSIVE ============================================================ */
 @media (max-width: 1080px) {
   .split,
-  .mentor,
-  .contact {
+  .mentor {
     grid-template-columns: 1fr;
   }
   .split__media,
   .mentor__media {
     max-width: 460px;
+    width: 100%;
+  }
+  .split--form .split__media {
+    min-height: 340px;
   }
   .items {
     grid-template-columns: repeat(2, 1fr);

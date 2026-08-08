@@ -6,7 +6,6 @@ import { leadsRouter } from "./routes/leads.js";
 import { DIVISIONS, TOTAL } from "@fitamins/shared/deliverables";
 
 const app = express();
-const PORT = process.env.PORT || 4000;
 
 const origins = (process.env.CORS_ORIGIN || "http://localhost:5173")
   .split(",")
@@ -28,11 +27,21 @@ app.use("/api/leads", leadsRouter);
 
 app.use((_req, res) => res.status(404).json({ ok: false, error: "Not found" }));
 
-async function start() {
-  await connectDb(process.env.MONGODB_URI);
-  app.listen(PORT, () => {
-    console.log(`[api] Fitamins API listening on http://localhost:${PORT}`);
+export default app;
+
+// Start a standalone HTTP server only when run directly (local dev / traditional
+// hosting). On Vercel the app is imported by the serverless entry instead, so we
+// must NOT call listen() there.
+const runDirectly =
+  !process.env.VERCEL &&
+  process.argv[1] &&
+  import.meta.url === `file://${process.argv[1]}`;
+
+if (runDirectly) {
+  const PORT = process.env.PORT || 4000;
+  connectDb(process.env.MONGODB_URI).then(() => {
+    app.listen(PORT, () => {
+      console.log(`[api] Fitamins API listening on http://localhost:${PORT}`);
+    });
   });
 }
-
-start();

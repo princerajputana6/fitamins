@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { fadeUp, stagger, viewportOnce } from "../lib/motion.js";
 import Reveal from "./Reveal.jsx";
+import PulseLine from "./PulseLine.jsx";
 import { ArrowRight } from "./icons.jsx";
 
 const LINES = [
@@ -23,6 +24,8 @@ export default function Promise() {
             profitable nutrition brand.
           </p>
         </Reveal>
+
+        <PulseLine className="promise__pulse" />
 
         <motion.div
           className="build-lines"

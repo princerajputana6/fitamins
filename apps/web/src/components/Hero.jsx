@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { EASE } from "../lib/motion.js";
 import { IMG } from "../lib/images.js";
 import { ArrowRight } from "./icons.jsx";
+import CountUp from "./CountUp.jsx";
 
 const TITLE = [
   { t: "From", accent: false },
@@ -29,9 +30,9 @@ const upV = {
 };
 
 const STATS = [
-  { n: "54", l: "Deliverables" },
-  { n: "08", l: "Divisions" },
-  { n: "01", l: "Vendor to manage" },
+  { n: 54, l: "Deliverables" },
+  { n: 8, l: "Divisions" },
+  { n: 1, l: "Vendor to manage" },
 ];
 
 export default function Hero() {
@@ -128,7 +129,9 @@ export default function Hero() {
         >
           {STATS.map((s) => (
             <div className="hero__stat" key={s.l}>
-              <b>{s.n}</b>
+              <b>
+                <CountUp target={s.n} pad={2} />
+              </b>
               <span>{s.l}</span>
             </div>
           ))}

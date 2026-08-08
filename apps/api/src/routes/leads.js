@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validateLead } from "@fitamins/shared/validate";
 import { Lead } from "../models/Lead.js";
 import { isDbConnected } from "../db.js";
+import { sendLeadEmail } from "../lib/email.js";
 
 export const leadsRouter = Router();
 
@@ -17,13 +18,20 @@ leadsRouter.post("/", async (req, res) => {
   const payload = { ...value, source: "website" };
 
   try {
+    let response;
     if (isDbConnected()) {
       const lead = await Lead.create(payload);
-      return res.status(201).json({ ok: true, id: lead._id });
+      response = { ok: true, id: lead._id };
+    } else {
+      const record = { ...payload, _id: `mem_${Date.now()}`, createdAt: new Date() };
+      memoryStore.push(record);
+      response = { ok: true, id: record._id, mode: "memory" };
     }
-    const record = { ...payload, _id: `mem_${Date.now()}`, createdAt: new Date() };
-    memoryStore.push(record);
-    return res.status(201).json({ ok: true, id: record._id, mode: "memory" });
+
+    // Notify the team by email. Failure here must not fail the request.
+    await sendLeadEmail(payload);
+
+    return res.status(201).json(response);
   } catch (err) {
     console.error("[leads] create failed", err);
     return res.status(500).json({ ok: false, error: "Could not save your request." });

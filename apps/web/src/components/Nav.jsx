@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { EASE } from "../lib/motion.js";
-import { Logo, ArrowRight } from "./icons.jsx";
+import { ArrowRight } from "./icons.jsx";
+import Brand from "./Brand.jsx";
 
 const LINKS = [
   { href: "#capabilities", label: "What you get" },
@@ -30,15 +31,8 @@ export default function Nav() {
         transition={{ duration: 0.7, ease: EASE }}
       >
         <div className="wrap nav__in">
-          <a href="#top" className="brand" aria-label="Fitamins Healthcare, home">
-            <span className="brand__mark">
-              <Logo />
-            </span>
-            <span className="brand__txt">
-              <span className="brand__name">Fitamins</span>
-              <span className="brand__sub">Healthcare</span>
-            </span>
-          </a>
+          <Brand />
+
 
           <nav className="nav__links" aria-label="Primary">
             {LINKS.map((l) => (

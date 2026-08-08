@@ -1,5 +1,6 @@
 import Reveal from "./Reveal.jsx";
-import { Logo, ArrowRight } from "./icons.jsx";
+import { ArrowRight } from "./icons.jsx";
+import Brand from "./Brand.jsx";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -19,15 +20,7 @@ export default function Footer() {
 
         <div className="foot__top">
           <div className="foot__brand">
-            <a href="#top" className="brand">
-              <span className="brand__mark">
-                <Logo />
-              </span>
-              <span className="brand__txt">
-                <span className="brand__name">Fitamins</span>
-                <span className="brand__sub">Healthcare Pvt. Ltd.</span>
-              </span>
-            </a>
+            <Brand className="brand--foot" />
             <p>
               From idea to industry. We build supplement brands end to end — and stay on to
               grow them.

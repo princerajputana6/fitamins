@@ -9,7 +9,6 @@ import Process from "./components/Process.jsx";
 import Why from "./components/Why.jsx";
 import Mentorship from "./components/Mentorship.jsx";
 import Promise from "./components/Promise.jsx";
-import Contact from "./components/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 
 export default function App() {
@@ -28,7 +27,6 @@ export default function App() {
         <Mentorship />
         <Marquee reverse duration={30} />
         <Promise />
-        <Contact />
       </main>
       <Footer />
     </>

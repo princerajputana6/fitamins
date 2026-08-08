@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import Reveal from "./Reveal.jsx";
-import Img from "./Img.jsx";
+import LeadForm from "./LeadForm.jsx";
 import { IMG } from "../lib/images.js";
 
 export default function Intro() {
   return (
     <section className="sec bg-cream" id="about">
-      <div className="wrap split">
+      <div className="wrap split split--form">
+        {/* Left: nutrition image + badge. */}
         <motion.div
           className="split__media"
           initial={{ opacity: 0, clipPath: "inset(12% 12% 12% 12% round 32px)" }}
@@ -14,7 +15,7 @@ export default function Intro() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.9, ease: [0.22, 0.61, 0.36, 1] }}
         >
-          <Img src={IMG.smoothie} alt="Nutrition and wellness" parallax={40} />
+          <img src={IMG.smoothie} alt="Nutrition and wellness" loading="lazy" />
           <div className="split__badge">
             <b>1</b>
             <span>
@@ -23,7 +24,8 @@ export default function Intro() {
           </div>
         </motion.div>
 
-        <div className="split__content">
+        {/* Right: about copy + consultation form. */}
+        <div className="split__content" id="contact">
           <Reveal>
             <p className="eyebrow">Who we are</p>
             <h2 className="split__big">
@@ -43,11 +45,8 @@ export default function Intro() {
               partner at every stage of the journey.
             </p>
           </Reveal>
-          <Reveal className="btn-row" delay={0.16}>
-            <a href="#capabilities" className="btn btn--primary">
-              Explore the 54 deliverables
-            </a>
-          </Reveal>
+
+          <LeadForm idPrefix="intro" delay={0.16} />
         </div>
       </div>
     </section>

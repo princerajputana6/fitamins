@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PROCESS_IMG } from "../lib/images.js";
 
@@ -15,18 +15,44 @@ const STEPS = [
 
 export default function Process() {
   const ref = useRef(null);
+  const railRef = useRef(null);
+  // Horizontal distance (px) the rail must travel so the last card fully clears.
+  const [distance, setDistance] = useState(0);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const rail = railRef.current;
+      if (!rail) return;
+      setDistance(Math.max(0, rail.scrollWidth - rail.clientWidth));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    // Re-measure once fonts/images have settled and could change widths.
+    const t = setTimeout(measure, 400);
+    return () => {
+      window.removeEventListener("resize", measure);
+      clearTimeout(t);
+    };
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // Move the rail left as the user scrolls through the pinned section.
-  const x = useTransform(scrollYProgress, [0, 1], ["2%", "-78%"]);
+  // Drive the rail 1:1 with the scrolled distance so every card is reachable and
+  // the pinned viewport never empties into a dark blank band.
+  const x = useTransform(scrollYProgress, [0, 1], [0, -distance]);
   const barScale = useTransform(scrollYProgress, [0, 1], [0.06, 1]);
 
   return (
-    // Tall spacer drives the pinned sticky viewport (one screen per ~scroll).
-    <section className="pin" id="process" ref={ref} style={{ height: "320vh" }}>
+    // Section is exactly one viewport plus the horizontal travel — no dead scroll.
+    <section
+      className="pin"
+      id="process"
+      ref={ref}
+      style={{ height: `calc(100svh + ${distance}px)` }}
+    >
       <div className="pin__sticky">
         <div className="pin__head">
           <p className="eyebrow eyebrow--lime">How it runs</p>
@@ -37,18 +63,23 @@ export default function Process() {
           </p>
         </div>
 
-        <motion.div className="pin__rail" style={{ x }}>
+        <motion.div className="pin__rail" ref={railRef} style={{ x }}>
           {STEPS.map((s, i) => (
-            <article className="pcard" key={s.no}>
+            <motion.article
+              className="pcard"
+              key={s.no}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+            >
               <div className="pcard__media">
                 <span className="pcard__no">{s.no}</span>
-                <img src={PROCESS_IMG[i]} alt={s.title} />
+                <img src={PROCESS_IMG[i]} alt={s.title} loading="lazy" />
               </div>
               <div className="pcard__body">
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </motion.div>
 
