@@ -7,7 +7,7 @@ import {
   animate,
   useTransform,
 } from "framer-motion";
-import { DIVISIONS, ALL, TOTAL } from "@fitamins/shared/deliverables";
+import { DIVISIONS, ALL, TOTAL } from "../data/deliverables.js";
 import Reveal from "./Reveal.jsx";
 import { SearchIcon } from "./icons.jsx";
 

@@ -12,7 +12,6 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@fitamins/shared": "*",
     "@vitejs/plugin-react": "^4.3.2",
     "framer-motion": "^11.11.1",
     "react": "^18.3.1",

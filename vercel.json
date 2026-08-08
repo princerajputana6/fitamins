@@ -1,8 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "installCommand": "npm ci --include=dev || npm install --include=dev --production=false",
+  "framework": "vite",
+  "installCommand": "npm install",
   "buildCommand": "npm run build --workspace @fitamins/web",
-  "outputDirectory": "apps/web/dist",
-  "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
+  "outputDirectory": "apps/web/dist"
 }

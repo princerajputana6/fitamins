@@ -1,5 +1,4 @@
-// Lead-form validation shared by the React form and the Express route,
-// so the client and server agree on exactly what a valid lead is.
+// Lead-form validation (vendored into the web app so it has no workspace deps).
 export const STAGES = [
   "Starting a new brand",
   "Scaling an existing brand",

@@ -1,5 +1,4 @@
-// The 54 deliverables across 8 divisions — the single source of truth
-// shared between the web app (rendering the manifest) and the API.
+// The 54 deliverables across 8 divisions (vendored into the web app).
 export const DIVISIONS = [
   {
     id: "identity",

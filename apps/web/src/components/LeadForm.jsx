@@ -1,10 +1,12 @@
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { STAGES, PRODUCT_CATEGORIES, validateLead } from "@fitamins/shared/validate";
+import { STAGES, PRODUCT_CATEGORIES, validateLead } from "../data/validate.js";
 import { EASE } from "../lib/motion.js";
 import Reveal from "./Reveal.jsx";
-import { submitLead } from "../lib/api.js";
 import { ArrowRight, BigCheck } from "./icons.jsx";
+
+// Where consultation requests are sent.
+const LEAD_EMAIL = "connect@biztreck.world";
 
 const INITIAL = {
   name: "",
@@ -17,14 +19,14 @@ const INITIAL = {
 
 /**
  * Self-contained consultation form. `idPrefix` keeps input ids/labels unique so the
- * form can render more than once on the page (Intro + bottom Contact).
+ * form can render more than once on the page. With no backend, a valid submission
+ * opens the visitor's email client with all details pre-filled to LEAD_EMAIL.
  */
 export default function LeadForm({ idPrefix = "lead", delay = 0.08 }) {
   const formRef = useRef(null);
   const [form, setForm] = useState(INITIAL);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("idle"); // idle | sending | done | error
-  const [serverError, setServerError] = useState("");
+  const [status, setStatus] = useState("idle"); // idle | done
   const id = (k) => `${idPrefix}-${k}`;
 
   const set = (key) => (e) => {
@@ -32,9 +34,8 @@ export default function LeadForm({ idPrefix = "lead", delay = 0.08 }) {
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  async function onSubmit(e) {
+  function onSubmit(e) {
     e.preventDefault();
-    setServerError("");
     const { valid, errors: errs, value } = validateLead(form);
     if (!valid) {
       setErrors(errs);
@@ -42,15 +43,21 @@ export default function LeadForm({ idPrefix = "lead", delay = 0.08 }) {
       first?.focus();
       return;
     }
-    setStatus("sending");
-    try {
-      await submitLead(value);
-      setStatus("done");
-    } catch (err) {
-      setErrors(err.fieldErrors || {});
-      setServerError(err.message || "Something went wrong. Please try again.");
-      setStatus("error");
-    }
+    const subject = `Consultation request — ${value.name}`;
+    const body = [
+      `Name: ${value.name}`,
+      `Phone: ${value.phone}`,
+      `Email: ${value.email}`,
+      `Where they are: ${value.stage}`,
+      `Product category: ${value.category}`,
+      "",
+      "What they want to build:",
+      value.message || "-",
+    ].join("\r\n");
+    window.location.href = `mailto:${LEAD_EMAIL}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+    setStatus("done");
   }
 
   return (
@@ -65,8 +72,11 @@ export default function LeadForm({ idPrefix = "lead", delay = 0.08 }) {
             transition={{ duration: 0.4, ease: EASE }}
           >
             <BigCheck />
-            <h3>Request sent</h3>
-            <p>Our team will call you within one working day to set up the consultation.</p>
+            <h3>Almost there</h3>
+            <p>
+              We&apos;ve opened your email app with the details filled in — just press send.
+              If it didn&apos;t open, write to us at <a href={`mailto:${LEAD_EMAIL}`}>{LEAD_EMAIL}</a>.
+            </p>
           </motion.div>
         ) : (
           <motion.form
@@ -159,20 +169,9 @@ export default function LeadForm({ idPrefix = "lead", delay = 0.08 }) {
               />
             </div>
 
-            {serverError && (
-              <p className="field__err" style={{ marginBottom: 12 }}>
-                {serverError}
-              </p>
-            )}
-
-            <motion.button
-              type="submit"
-              className="btn btn--primary"
-              disabled={status === "sending"}
-              whileTap={{ scale: 0.98 }}
-            >
-              {status === "sending" ? "Sending…" : "Book free consultation"}
-              {status !== "sending" && <ArrowRight />}
+            <motion.button type="submit" className="btn btn--primary" whileTap={{ scale: 0.98 }}>
+              Book free consultation
+              <ArrowRight />
             </motion.button>
             <p className="form__fine">
               We reply within one working day. Your details stay with our team.

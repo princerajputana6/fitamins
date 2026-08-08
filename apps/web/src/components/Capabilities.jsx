@@ -1,6 +1,6 @@
 import { useRef, useState, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
-import { DIVISIONS } from "@fitamins/shared/deliverables";
+import { DIVISIONS } from "../data/deliverables.js";
 import { DIVISION_IMG } from "../lib/images.js";
 import { EASE } from "../lib/motion.js";
 import Reveal from "./Reveal.jsx";
