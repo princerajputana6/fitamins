@@ -691,6 +691,99 @@ textarea {
   flex: none;
 }
 
+/* ============================================================ BRANDS ============================================================ */
+.brands__head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto clamp(32px, 4vw, 52px);
+}
+.brands__head .eyebrow {
+  justify-content: center;
+}
+.brands__title {
+  margin: 0;
+}
+.brands__rail {
+  overflow: hidden;
+  padding-block: 8px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.brands__track {
+  display: flex;
+  width: max-content;
+  gap: 22px;
+  animation: brands-scroll 42s linear infinite;
+  will-change: transform;
+}
+.brands__rail:hover .brands__track {
+  animation-play-state: paused;
+}
+@keyframes brands-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Track holds two copies; shift by exactly one to loop seamlessly. */
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.brandtile {
+  flex: none;
+  margin: 0;
+  width: clamp(184px, 22vw, 236px);
+  height: clamp(120px, 15vw, 148px);
+  display: grid;
+  place-items: center;
+  padding: 26px 30px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--paper);
+  box-shadow: 0 14px 34px -26px rgba(10, 32, 25, 0.5);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease),
+    border-color 0.4s var(--ease);
+}
+.brandtile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(12, 23, 18, 0.16);
+  box-shadow: var(--sh-md);
+}
+.brandtile--dark {
+  background: #0e0e0e;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.brandtile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.brandtile__word {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--ink-60);
+}
+.brandtile--dark .brandtile__word {
+  color: rgba(255, 255, 255, 0.82);
+}
+@media (prefers-reduced-motion: reduce) {
+  .brands__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .brands__rail {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
 /* ============================================================ INTRO SPLIT ============================================================ */
 .split {
   display: grid;

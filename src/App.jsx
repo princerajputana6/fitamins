@@ -2,6 +2,7 @@ import ScrollProgress from "./components/ScrollProgress.jsx";
 import Nav from "./components/Nav.jsx";
 import Hero from "./components/Hero.jsx";
 import Marquee from "./components/Marquee.jsx";
+import Brands from "./components/Brands.jsx";
 import Intro from "./components/Intro.jsx";
 import Capabilities from "./components/Capabilities.jsx";
 import Manifest from "./components/Manifest.jsx";
@@ -19,6 +20,7 @@ export default function App() {
       <main id="top">
         <Hero />
         <Marquee dark />
+        <Brands />
         <Intro />
         <Capabilities />
         <Manifest />
