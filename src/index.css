@@ -735,7 +735,7 @@ textarea {
   height: clamp(120px, 15vw, 148px);
   display: grid;
   place-items: center;
-  padding: 26px 30px;
+  padding: 14px 20px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
